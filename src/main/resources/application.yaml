@@ -1,0 +1,13 @@
+  spring:
+    application:
+               name: Student-Managment
+
+    datasource:
+         url: jdbc:mysql://localhost:3306/studentm?createDatabaseIfNotExist=true
+         username: root
+         password: Nidumolu@14
+    jpa:
+      show-sql: true
+    thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
