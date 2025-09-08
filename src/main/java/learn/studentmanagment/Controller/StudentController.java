@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
+
 @Controller
 @RequestMapping("/students")
 public class StudentController {
 
     private final StudentService studentService;
+    StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @GetMapping
     public String listStudents(Model model) {

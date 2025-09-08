@@ -1,4 +1,4 @@
-use studentm;
+use userDB;
 create table Student
 (
     Id         int auto_increment

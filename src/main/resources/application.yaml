@@ -3,11 +3,14 @@
                name: Student-Managment
 
     datasource:
-         url: jdbc:mysql://localhost:3306/studentm?createDatabaseIfNotExist=true
-         username: root
-         password: Nidumolu@14
+      url: jdbc:mysql://student.ccdqo46ustg4.us-east-1.rds.amazonaws.com:3306/userDB?useSSL=false
+      username: root
+      password: ${DBPASSWORD}
+
     jpa:
       show-sql: true
     thymeleaf:
       prefix: classpath:/templates/
       suffix: .html
+  server:
+    port: 5000
