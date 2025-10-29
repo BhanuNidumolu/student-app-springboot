@@ -1,16 +1,33 @@
-  spring:
-    application:
-               name: Student-Managment
+spring:
+  application:
+    name: Student-Management-API
 
-    datasource:
-      url: jdbc:mysql://student.ccdqo46ustg4.us-east-1.rds.amazonaws.com:3306/userDB?useSSL=false
-      username: root
-      password: ${DBPASSWORD}
+  datasource:
+    # Use environment variables for security
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/userDB?useSSL=false
+    username: ${DB_USER:root}
+    password: ${DBPASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-    jpa:
-      show-sql: true
-    thymeleaf:
-      prefix: classpath:/templates/
-      suffix: .html
-  server:
-    port: 5000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate # Let Flyway manage the schema
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    # This tells Flyway where to find the migration scripts
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+#    baseline-on-migrate: true
+server:
+  port: 8080 # Changed to 8080 to match Dockerfile
+file:
+  # This creates an 'uploads' folder in your project's root directory
+  upload-dir: ./uploads

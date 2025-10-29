@@ -1,55 +1,57 @@
 package learn.studentmanagment.Controller;
 
-import learn.studentmanagment.Entity.Student;
+import jakarta.validation.Valid;
+import learn.studentmanagment.Dto.StudentDto;
+import learn.studentmanagment.Dto.StudentRequestDto;
 import learn.studentmanagment.Service.StudentService;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
-@Controller
-@RequestMapping("/students")
+@RestController
+@RequestMapping("/api/students")
 public class StudentController {
 
     private final StudentService studentService;
-    StudentController(StudentService studentService) {
+
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
-    @GetMapping
-    public String listStudents(Model model) {
-        model.addAttribute("students", studentService.getAllStudent());
-        return "students";  // -> students.html
-    }
-
-    @GetMapping("/new")
-    public String createStudentForm(Model model) {
-        model.addAttribute("student", new Student());
-        return "create_student"; // -> create_student.html
-    }
-
+    // CREATE (ADMIN only)
     @PostMapping
-    public String saveStudent(@ModelAttribute("student") Student student) {
-        studentService.saveStudent(student);
-        return "redirect:/students";
+    public ResponseEntity<StudentDto> createStudent(@Valid @RequestBody StudentRequestDto requestDto) {
+        StudentDto createdStudent = studentService.createStudent(requestDto);
+        return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
 
-    @GetMapping("/edit/{id}")
-    public String editStudentForm(@PathVariable Long id, Model model) {
-        model.addAttribute("student", studentService.getStudentById(id));
-        return "edit_student"; // -> edit_student.html
+    // READ ALL (ADMIN, TEACHER, STUDENT)
+    @GetMapping
+    public ResponseEntity<List<StudentDto>> getAllStudents() {
+        List<StudentDto> students = studentService.getAllStudents();
+        return ResponseEntity.ok(students);
     }
 
-    @PostMapping("/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student) {
-        studentService.updateStudent(id, student);
-        return "redirect:/students";
+    // READ ONE (ADMIN, TEACHER, STUDENT)
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id) {
+        StudentDto student = studentService.getStudentById(id);
+        return ResponseEntity.ok(student);
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudentById(id);
-        return "redirect:/students";
+    // UPDATE (ADMIN only)
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRequestDto requestDto) {
+        StudentDto updatedStudent = studentService.updateStudent(id, requestDto);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    // DELETE (ADMIN only)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok("Student deleted successfully");
     }
 }

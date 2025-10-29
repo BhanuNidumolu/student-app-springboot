@@ -1,15 +1,14 @@
 package learn.studentmanagment.Service;
 
-import learn.studentmanagment.Entity.Student;
-import org.springframework.stereotype.Service;
-
+import learn.studentmanagment.Dto.StudentDto;
+import learn.studentmanagment.Dto.StudentRequestDto;
 import java.util.List;
 
-@Service
 public interface StudentService {
-    List<Student> getAllStudent();
-    Student saveStudent(Student student);
-    Student getStudentById(Long id);
-    Student updateStudent(Long id, Student student);
-    void deleteStudentById(Long id);
+    StudentDto createStudent(StudentRequestDto requestDto);
+    List<StudentDto> getAllStudents();
+    StudentDto getStudentById(Long id);
+    StudentDto updateStudent(Long id, StudentRequestDto requestDto);
+    void deleteStudent(Long id);
+
 }
